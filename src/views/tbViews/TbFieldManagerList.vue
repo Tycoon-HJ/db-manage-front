@@ -219,7 +219,7 @@ export default {
         title: 'This is a notification message',
         content: h('div',{}, [
           h('p', 'some messages...some messages...'),
-          h('p', 'some messages...some messages...'),
+          h('p', '显示消息...'),
         ]),
         onOk() {},
       });
