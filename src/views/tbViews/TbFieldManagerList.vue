@@ -75,8 +75,8 @@
           class="j-table-force-nowrap"
           @change="handleTableChange"
       >
-<!--字典弹窗-->
-        <a slot="fieldName" slot-scope="text" @click="info">{{text}}</a>
+        <!--字典弹窗-->
+        <a slot="fieldId" slot-scope="text" @click="info(text)">{{ text }}</a>
 
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
@@ -129,6 +129,7 @@ import '@/assets/less/TableExpand.less'
 import {mixinDevice} from '@/utils/mixin'
 import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 import TbFieldManagerModal from './modules/TbFieldManagerModal'
+import {getDictDtl} from "@api/getDictForSearch";
 
 export default {
   name: 'TbFieldManagerList',
@@ -155,10 +156,10 @@ export default {
           title: '字段名称',
           align: "center",
           dataIndex: 'fieldName',
-          scopedSlots: { customRender: 'fieldName' },
+          scopedSlots: {customRender: 'fieldName'},
         },
-          {
-            title: '字段是否是字典',
+        {
+          title: '字段是否是字典',
           align: "center",
           dataIndex: 'fieldIsDictFlag_dictText'
         },
@@ -171,6 +172,12 @@ export default {
           title: '字段长度',
           align: "center",
           dataIndex: 'fieldLength'
+        },
+        {
+          title: '字段关联字典',
+          align: "center",
+          dataIndex: 'fieldId',
+          scopedSlots: {customRender: 'fieldId'},
         },
         {
           title: '操作',
@@ -188,10 +195,9 @@ export default {
         exportXlsUrl: "/tbFieldManager/tbFieldManager/exportXls",
         importExcelUrl: "tbFieldManager/tbFieldManager/importExcel",
       },
-      dictOptions: {},
       superFieldList: [],
     }
-    },
+  },
   created() {
     this.getSuperFieldList();
   },
@@ -210,21 +216,28 @@ export default {
       fieldList.push({type: 'string', value: 'fieldIsDictFlag', text: '字段是否是字典', dictCode: 'is_dict'})
       fieldList.push({type: 'string', value: 'fieldNameCn', text: '字段中文名', dictCode: ''})
       fieldList.push({type: 'string', value: 'fieldLength', text: '字段长度', dictCode: ''})
+      fieldList.push({type: 'string', value: 'fieldId', text: '字段关联字典', dictCode: ''})
       this.superFieldList = fieldList
     },
     //显示模态框
-    info() {
+    async info(record) {
+      let dictDtls = []
       const h = this.$createElement
+      let dictDtl = await getDictDtl(record)
+      for (let dtlKey in dictDtl) {
+        dictDtls.push(h('p', '字典子项为：' + dictDtl[dtlKey].value + '子项名称为：' + dictDtl[dtlKey].text))
+      }
+      if (dictDtls.length ===0){
+        dictDtls.push(h('p', '无字典子项！！！'))
+      }
       this.$info({
-        title: 'This is a notification message',
-        content: h('div',{}, [
-          h('p', 'some messages...some messages...'),
-          h('p', '显示消息...'),
-        ]),
-        onOk() {},
-      });
-    },
-
+        title: '字典明细',
+        content: h('div', {}, dictDtls),
+        destroyOnClose: true,
+        onOk() {
+        },
+      })
+    }
   }
 }
 </script>
