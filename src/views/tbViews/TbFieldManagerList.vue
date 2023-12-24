@@ -51,6 +51,8 @@
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
+        <a-button @click="downloadSysFile" type="primary" icon="download">下载</a-button>
+        <a-progress :percent="100" :successPercent="parseInt(fake.progress*100)" />
     </div>
 
     <!-- table区域-begin -->
@@ -130,6 +132,7 @@ import {mixinDevice} from '@/utils/mixin'
 import {JeecgListMixin} from '@/mixins/JeecgListMixin'
 import TbFieldManagerModal from './modules/TbFieldManagerModal'
 import {getDictDtl} from "@api/getDictForSearch";
+import FakeProgress from "fake-progress";
 
 export default {
   name: 'TbFieldManagerList',
@@ -139,6 +142,10 @@ export default {
   },
   data() {
     return {
+        fake: new FakeProgress({
+            timeConstant: 6000,
+            autoStart: false
+        }),
       description: '字段管理管理页面',
       // 表头
       columns: [
@@ -237,7 +244,16 @@ export default {
         onOk() {
         },
       })
-    }
+    },
+      // 下载进度条
+      downloadSysFile(){
+        this.fake.start();
+        // 从后端获取进度，获取值为100时，结束下载
+
+
+
+        this.fake.end();
+      }
   }
 }
 </script>

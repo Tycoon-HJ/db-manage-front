@@ -134,7 +134,7 @@ export default {
         // 表头
         columns: [
           {
-            title: '#',
+            title: '序号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -209,7 +209,7 @@ export default {
           deleteBatch: "/tbDbManage/tbDbManage/deleteBatch",
           exportXlsUrl: "/tbDbManage/tbDbManage/exportXls",
           importExcelUrl: "tbDbManage/tbDbManage/importExcel",
-          
+
         },
         dictOptions:{},
         superFieldList:[],
