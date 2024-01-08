@@ -1,6 +1,7 @@
 Ant Design Jeecg Vue
 ====
-
+版本太高，需要执行该命令
+export NODE_OPTIONS=--openssl-legacy-provider <br>
 当前最新版本： 3.0.0（发布日期：2021-11-01）
 
 Overview
